@@ -2,7 +2,7 @@
 
 This tutorial presents a complete and structured guide to integrating **IBM watsonx.ai** foundation models into the **Langflow** visual programming environment using custom components. You will learn how to install Langflow, configure IBM watsonx.ai, develop chatbot and agent flows, and incorporate vector-based Retrieval Augmented Generation (RAG).
 
----
+
 
 ## Project Structure Overview
 
@@ -21,7 +21,7 @@ langflow-watsonx-integration/
 
 This structure allows you to easily extend or embed the components into a Langflow-based application.
 
----
+
 
 ## Features of the Integration
 
@@ -32,7 +32,7 @@ This structure allows you to easily extend or embed the components into a Langfl
 - Embedding generation for use in RAG and vector search pipelines.
 - Example agent flow integration with Langflow’s tool-calling framework.
 
----
+
 
 ## Installation and Environment Setup
 
@@ -134,7 +134,7 @@ python componets/utils/models.py
 
 This script queries the watsonx.ai model endpoint for currently supported models and lists them in the terminal.
 
----
+
 
 ## Creating Your First Langflow Flow with watsonx.ai
 
@@ -156,7 +156,7 @@ This script queries the watsonx.ai model endpoint for currently supported models
     - Optional: Tune generation parameters such as `temperature`, `max_tokens`, etc.
 5. Click **Playground** to start an interactive session and test your chatbot.
 
----
+
 
 ## Embedding and Vector Search (RAG Workflow)
 
@@ -172,7 +172,7 @@ Chat Input → Prompt → Embedding → Vector Store → Retriever → Prompt �
 
 You may use any vector store Langflow supports (e.g., Astra DB, Chroma, FAISS). Make sure embeddings are indexed before querying.
 
----
+
 
 ## Building a Simple Agent with Langflow and watsonx.ai
 
@@ -195,7 +195,7 @@ Example query:
 **"Create a tabletop RPG character."**  
 You’ll see the agent select tools and use watsonx.ai to return structured answers.
 
----
+
 
 ## Using the Component in Python Code
 
@@ -226,7 +226,7 @@ This allows you to integrate IBM watsonx.ai outside the Langflow UI if needed.
   Clear `.cache/langflow/` directory in your home folder.
 
 
----
+
 
 ## Conclusion
 
