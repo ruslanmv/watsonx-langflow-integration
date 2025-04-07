@@ -225,11 +225,6 @@ This allows you to integrate IBM watsonx.ai outside the Langflow UI if needed.
 - Migration error?  
   Clear `.cache/langflow/` directory in your home folder.
 
----
-
-## License
-
-This integration is provided under the terms of the MIT License. See the `LICENSE` file for full details.
 
 ---
 
