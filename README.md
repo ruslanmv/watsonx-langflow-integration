@@ -120,9 +120,7 @@ python components/utils/list_embeddings.py
 ```bash
 python components/utils/list_models.py
 ```
-![alt text](/assets/image-1.png)
-
-![alt text](image-2.png)
+![alt text](/assets/image-2.png)
 
 This script queries the watsonx.ai model endpoint for currently supported models and lists them in the terminal.
 
