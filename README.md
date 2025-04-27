@@ -85,7 +85,7 @@ Copy the provided files into these locations:
 
 ```bash
 cp components/llm/watsonx.py ~/.langflow/components/llm/
-cp components/embeddings/watsonx_embedding.py ~/.langflow/components/embeddings/
+cp components/embeddings/watsonx_embeddings.py ~/.langflow/components/embeddings/
 ```
 
 ### Step 2: Configure IBM watsonx.ai Access
@@ -110,11 +110,19 @@ Supported endpoint regions include:
 
 ### Step 3: Test Available Models
 
-Run the following script to list available foundation models in your region:
+Run the following script to list available embeddings models in your region:
 
 ```bash
-python components/utils/models.py
+python components/utils/list_embeddings.py
 ```
+![alt text](/assets/image-1.png)
+
+```bash
+python components/utils/list_models.py
+```
+![alt text](/assets/image-1.png)
+
+![alt text](image-2.png)
 
 This script queries the watsonx.ai model endpoint for currently supported models and lists them in the terminal.
 
