@@ -55,21 +55,6 @@ This script will:
 - Install Langflow and required dependencies.
 - Verify that the environment is ready for running Langflow.
 
-### Step 1: Start Langflow
-
-After the installation completes, activate your virtual environment:
-
-```bash
-source .venv/bin/activate
-```
-
-Then start Langflow:
-
-```bash
-langflow run
-```
-
-Open your browser and navigate to [http://127.0.0.1:7860](http://127.0.0.1:7860) to access the visual interface.
 
 ## Adding IBM watsonx.ai Integration
 
@@ -124,18 +109,35 @@ python components/utils/list_models.py
 
 This script queries the watsonx.ai model endpoint for currently supported models and lists them in the terminal.
 
+
+
+
 ## Creating Your First Langflow Flow with watsonx.ai
 
 ### Step-by-Step Guide to Create a Single Agent RAG Flow
-
 This guide will walk you through creating a single agent flow that uses Retrieval Augmented Generation (RAG).
 
+### Step 1: Start Langflow
+
+After the installation completes, activate your virtual environment:
+
+```bash
+source .venv/bin/activate
+```
+
+Then start Langflow:
+
+```bash
+langflow run
+```
 1. **Open the Langflow Interface:**
-   - In your browser, navigate to [http://127.0.0.1:7860](http://127.0.0.1:7860).
+
+Open your browser and navigate to [http://127.0.0.1:7860](http://127.0.0.1:7860) to access the visual interface.
+
 
 2. **Create a New Flow:**
    - Click on **New Flow** and choose **Blank Flow** to start with an empty canvas.
-
+![](assets/2025-04-27-09-55-46.png)
 3. **Add Components:**
    - **Chat Input:** Drag and drop a **Chat Input** component—this will be your query input.
    - **Prompt:** Add a **Prompt** component to transform and prepare the input for further processing.
