@@ -1,4 +1,7 @@
 # IBM watsonx.ai Integration with Langflow
+![](assets/2025-04-29-23-34-25.png)
+
+
 ## Building RAG Applications with IBM watsonx.ai and Langflow
 This tutorial presents a complete and structured guide to integrating **IBM watsonx.ai** foundation models into the **Langflow** visual programming environment using custom components. You will learn how to install Langflow, configure IBM watsonx.ai, develop chatbot and agent flows, and incorporate vector-based Retrieval Augmented Generation (RAG).
 
@@ -204,6 +207,7 @@ Langflow can also orchestrate tool-enabled agents. Start a new flow and choose *
 
 
 
+
 ### Putting the Finished Flow to Work  
 
 Once the full RAG workflow is running, open **Playground** (the rightmost tab on the Langflow toolbar). In the chat panel type:
@@ -218,8 +222,6 @@ Langflow forwards your question through the pipeline, retrieves the matching chu
 
 
 
-
-Here's the corrected version of that section for your `README.md`, using the supported API-based approach instead of direct component imports:
 
 ---
 
@@ -321,6 +323,6 @@ If you encounter caching hiccups, remove the `.cache/langflow/` folder in your h
 ### Where to Go from Here  
 
 You have just created a fully working Retrieval-Augmented-Generation chatbot powered by IBM watsonx.ai. Experiment with larger context windows, swap in different embedding models, or export the entire flow as a Python script and drop it straight into production. Langflow’s visual canvas combined with watsonx.ai’s enterprise-grade models gives you a rapid yet robust path from idea to deployed application.
-
+![](assets/2025-04-29-23-33-04.png)
 **Congratulations!** You have
 learned how to build a Visual RAG Pipeline with Langflow and IBM watsonx.ai
