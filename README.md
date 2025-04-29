@@ -1,5 +1,5 @@
 # IBM watsonx.ai Integration with Langflow
-
+## Building RAG Applications with IBM watsonx.ai and Langflow
 This tutorial presents a complete and structured guide to integrating **IBM watsonx.ai** foundation models into the **Langflow** visual programming environment using custom components. You will learn how to install Langflow, configure IBM watsonx.ai, develop chatbot and agent flows, and incorporate vector-based Retrieval Augmented Generation (RAG).
 
 ## Project Structure Overview
@@ -110,124 +110,217 @@ python components/utils/list_models.py
 This script queries the watsonx.ai model endpoint for currently supported models and lists them in the terminal.
 
 
+## Creating Your First Langflow Flow with watsonx.ai  
+ 
 
+Langflow turns the usually code-heavy task of building an LLM pipeline into a visual experience. In this walk-through you will spin up Langflow locally, drop IBM watsonx.ai components onto the canvas, and weave them together into a Retrieval-Augmented-Generation (RAG) chatbot that understands a documentation website in real time.
 
-## Creating Your First Langflow Flow with watsonx.ai
+---
 
-### Step-by-Step Guide to Create a Single Agent RAG Flow
-This guide will walk you through creating a single agent flow that uses Retrieval Augmented Generation (RAG).
+### Step 1 — Launching Langflow  
 
-### Step 1: Start Langflow
-
-After the installation completes, activate your virtual environment:
+Begin by activating the virtual environment that was created during installation:
 
 ```bash
 source .venv/bin/activate
 ```
 
-Then start Langflow:
+With the environment live, start Langflow:
 
 ```bash
 langflow run
 ```
-1. **Open the Langflow Interface:**
 
-Open your browser and navigate to [http://127.0.0.1:7860](http://127.0.0.1:7860) to access the visual interface.
-
-
-2. **Create a New Flow:**
-   - Click on **New Flow** and choose **Blank Flow** to start with an empty canvas.
-![](assets/2025-04-27-09-55-46.png)
-3. **Add Components:**
-   - **Chat Input:** Drag and drop a **Chat Input** component—this will be your query input.
-   - **Prompt:** Add a **Prompt** component to transform and prepare the input for further processing.
-   - **IBM watsonx.ai Embedding:** Drag the `IBM watsonx.ai Embedding` component (from your installed custom components) to generate embeddings from the prompt.
-   - **Vector Store:** Add a **Vector Store** component (compatible with Langflow, such as FAISS, Chroma, or Astra DB) to index the embeddings.
-   - **Retriever:** Insert a **Retriever** component that will search the vector store to fetch relevant context.
-   - **IBM watsonx.ai LLM:** Drag the `IBM watsonx.ai LLM` component to generate responses that combine the original prompt with the retrieved context.
-   - **Chat Output:** Finally, add a **Chat Output** component to display the final answer.
-
-4. **Connect the Components:**
-
-   Arrange and connect the components in this logical order:
-   ```
-   Chat Input → Prompt → IBM watsonx.ai Embedding → Vector Store → Retriever → IBM watsonx.ai LLM → Chat Output
-   ```
-   This creates a RAG workflow where the user input is embedded and compared against a vector store. The LLM then uses the retrieved contextual information to generate a comprehensive response.
-
-5. **Configure the IBM watsonx.ai Components:**
-   - **For the Embedding Component:** Verify that it is correctly set up; typically, no extra configuration is required.
-   - **For the LLM Component:**
-     - **API Key:** Enter your IBM watsonx.ai API key.
-     - **Project ID:** Provide your watsonx.ai project identifier.
-     - **Endpoint URL:** Select or input your regional endpoint URL.
-     - **Model Name:** Choose the desired model from the dynamically loaded list.
-     - **Optional Parameters:** Adjust additional settings such as `temperature`, `max_tokens`, etc., as needed.
-
-6. **Save and Test Your Flow:**
-   - Click **Save** to store your flow.
-   - Use the **Playground** feature or simply enter a query via **Chat Input**.
-   - For example, type **"Summarize the latest advances in AI."**
-   - Verify that the system retrieves relevant context from your vector store and that the LLM produces an appropriate answer.
-
-## Building a Simple Agent with Langflow and watsonx.ai
-
-Langflow also supports creating tool-enabled agents. Here’s how to set up a basic agent:
-
-1. **Create a New Flow:**
-   - Click **New Flow** and select **Simple Agent**.
-
-2. **Replace Default Components:**
-   - Replace the default LLM component with the **IBM watsonx.ai LLM** component.
-   - Add additional tools (e.g., URL reader, calculator) as required.
-
-3. **Connect the Components:**
-   - Connect **Chat Input** to the agent component.
-   - Link the agent component to **Chat Output**.
-
-4. **Test the Agent:**
-   - In Playground mode, try a sample query such as **"Create a tabletop RPG character."**
-   - Observe how the agent uses the IBM watsonx.ai service (and any integrated tools) to generate a response.
-
-## Using the Components in Python Code
-
-For CLI or script-based testing, you can also use the components standalone in your Python code:
-
-```python
-from components.llm.watsonx import WatsonxComponent
-
-component = WatsonxComponent()
-llm = component.build_model()
-response = llm("Tell me about the IBM watsonx.ai platform.")
-print(response)
-```
-
-This allows you to integrate IBM watsonx.ai into your own scripts or applications, independent of the Langflow UI.
-
-## Troubleshooting & Support
-
-- If `langflow run` fails, try:
-  ```bash
-  python -m langflow run
-  ```
-- For dependency resolution issues, use:
-  ```bash
-  uv pip install langflow
-  ```
-- For migration or cache problems, clear the `.cache/langflow/` directory in your home folder.
-- Consult the [Langflow Documentation](https://docs.langflow.org) or IBM watsonx.ai support for additional help.
-
-## Conclusion
-
-This tutorial demonstrated how to:
-
-- Set up Langflow locally using `bash install.sh`
-- Integrate IBM watsonx.ai using custom Langflow components
-- Build interactive flows including chatbots, agent-based interactions, and RAG workflows
-- Extend functionality with embeddings and vector-based retrieval
-
-With this foundation, you can prototype and build powerful AI-driven workflows by combining IBM watsonx.ai foundation models with Langflow’s intuitive visual interface.
+Point your browser at **http://127.0.0.1:7860** and you will be greeted by the Langflow canvas. Create a fresh project by clicking **New Flow** and selecting **Blank Flow**; an empty grid now awaits your creativity.
 
 ---
 
-Enjoy creating your AI experiences with IBM watsonx.ai and Langflow!
+### Step 2 — Feeding the Pipeline with Web Content  
+
+Drag a **URL Loader** block onto the canvas. In its settings paste the page you want to study—for example `https://ibm.github.io/watsonx-ai-python-sdk/base.html`. Set the **Max Depth** field to 1 so the crawler stays on that single page rather than wandering through every internal link.  
+
+![](assets/2025-04-29-23-01-47.png)
+
+
+Directly beneath it drop a **Split Text** block. Connect the blue *Data* pin of the URL Loader to the purple *Data* pin of Split Text. Inside the Split Text panel choose a chunk size of 1000 characters and an overlap of 200; this keeps each slice manageable while preserving enough context across boundaries for later embedding.
+
+![](assets/2025-04-29-23-03-16.png)
+
+---
+
+### Step 3 — Distilling Text into Embeddings  
+
+Place the custom **Watsonx Embeddings** component onto the grid. Fill in your endpoint (for instance `https://us-south.ml.cloud.ibm.com`), your project ID and your API key, then select `sentence-transformers/all-minilm-l6-v2` as the model. Link the *Chunks* output of Split Text to the *Text* input of the Watsonx Embeddings block. Every chunk now emerges as a semantic vector ready for similarity search.
+
+![](assets/2025-04-29-23-03-48.png)
+
+
+### Step 4 — Indexing Vectors with ChromaDB  
+
+Add a **ChromaDB** block and name the collection `watsonx_docs`. If you want the database to survive restarts, specify a *Persist Directory* as well. Two connections are required: feed the text chunks from Split Text into the *Ingest Data* pin, and feed the vectors from the Embeddings block into the *Embedding* pin. Click the play icon and ChromaDB quietly indexes every vector it receives.
+
+![](assets/2025-04-29-23-05-21.png)
+
+
+### Step 5 — Parsing Search Results for the LLM  
+
+Introduce a **Parser** block, switch its mode to **Stringify**, and route the *Search Results* output of ChromaDB into the Parser’s input. Each retrieval will be flattened into plain text—ideal food for a prompt.
+
+![](assets/2025-04-29-23-05-57.png)
+
+### Step 6 — Accepting Questions and Crafting Prompts  
+
+Drop a **Chat Input** block onto the canvas. Wire its *Search Query* pin to the corresponding *Search Query* pin on ChromaDB, ensuring every user message triggers a nearest-neighbour lookup.  
+
+Next bring in a **Prompt** block and type a minimal template such as:
+
+```
+Use the following context to answer the question:
+{context}
+
+Question: {question}
+```
+
+Send the stringified context from the Parser to the Prompt’s *Context* pin and the raw user text from Chat Input to the *Question* pin. The Prompt component now assembles a fully-formed instruction containing both knowledge and query.
+
+![](assets/2025-04-29-23-07-16.png)
+
+### Step 7 — Generating Answers with watsonx.ai  
+
+Position an **IBM watsonx.ai LLM** block. Supply the same endpoint, project ID and API key you used for embeddings, then pick an instruction-tuned model—for example `meta-llama/llama-4-scout-17b-16e-instruct`. Connect the *Prompt Message* output of the Prompt component to the LLM’s input. Whenever the user speaks, the model will receive a rich prompt and return a text response.
+
+![](assets/2025-04-29-23-07-46.png)
+
+### Step 8 — Showing the Response to the User  
+
+Finally, add a **Chat Output** block and join the LLM’s *Message* pin to Chat Output’s input. The conversational loop is now closed: question in, answer out.
+
+Press **Run** at the top-right corner of Langflow, ask something like “How do I authenticate with the watsonx-ai Python SDK?” and watch the flow fetch the relevant snippet, build a context-aware prompt and deliver a precise explanation.
+
+
+### Building an Agent-Style Flow  
+
+Langflow can also orchestrate tool-enabled agents. Start a new flow and choose **Simple Agent** as the template. Replace the default LLM with the **IBM watsonx.ai LLM** you configured earlier, optionally drop in tools such as a URL reader or calculator, connect *Chat Input* to the agent and the agent to *Chat Output*, then run a prompt like “Create a tabletop RPG character.” The agent decides which tools to invoke and drafts a coherent reply via watsonx.ai.
+
+
+
+### Putting the Finished Flow to Work  
+
+Once the full RAG workflow is running, open **Playground** (the rightmost tab on the Langflow toolbar). In the chat panel type:
+
+```
+what are the Parameters of the APIClient
+```
+
+Langflow forwards your question through the pipeline, retrieves the matching chunk from the SDK documentation, builds a prompt and calls your LLM. With the example model **`meta-llama/llama-4-maverick-17b-128e-instruct-fp8`** you should see something close to:
+
+![](assets/2025-04-29-23-08-43.png)
+
+
+
+
+Here's the corrected version of that section for your `README.md`, using the supported API-based approach instead of direct component imports:
+
+---
+
+### Using Langflow via Python (Recommended API Approach)
+
+To interact with your Langflow flow programmatically, use the built-in **HTTP API** rather than importing components directly. This avoids circular import issues and follows Langflow's supported architecture.
+
+Here’s a working example in Python using `requests`:
+
+```python
+import requests
+
+# Replace with your actual Flow UUID
+url = "http://127.0.0.1:7860/api/v1/run/<your-flow-uuid>"
+
+payload = {
+    "input_value": "Tell me about the IBM watsonx.ai platform.",
+    "output_type": "chat",
+    "input_type": "chat"
+}
+
+headers = {
+    "Content-Type": "application/json"
+}
+
+try:
+    response = requests.post(url, json=payload, headers=headers)
+    response.raise_for_status()
+    print("Response from Langflow:")
+    print(response.text)
+except requests.exceptions.RequestException as e:
+    print(f"Error making API request: {e}")
+```
+
+> 💡 You can find your Flow UUID in the Langflow UI under `Export > API`.
+
+This method allows you to run and test your Langflow workflows from any Python script or backend service without needing to access internal components directly.
+
+
+Then you can  use
+
+```python
+import requests
+
+# Replace with your actual Flow UUID
+FLOW_ID = "2c02349f-303c-4fbd-b95d-d69646817840"
+API_URL = f"http://127.0.0.1:7860/api/v1/run/{FLOW_ID}"
+
+# Input payload for Langflow
+payload = {
+    "input_value": "hello world!",
+    "input_type": "chat",
+    "output_type": "chat"
+}
+
+headers = {
+    "Content-Type": "application/json"
+}
+
+try:
+    # Send the POST request to Langflow's API
+    response = requests.post(API_URL, json=payload, headers=headers)
+    response.raise_for_status()
+
+    # Parse the JSON response
+    data = response.json()
+
+    # Attempt to extract the chatbot's response message
+    message = (
+        data.get("outputs", [{}])[0]
+            .get("outputs", [{}])[0]
+            .get("results", {})
+            .get("message", {})
+            .get("text", "")
+    )
+
+    if message:
+        print("✅ AI Response:")
+        print(message)
+    else:
+        print("⚠️ No valid message found in the response.")
+        print("Raw Response:", response.text)
+
+except requests.exceptions.RequestException as e:
+    print(f"❌ Network or connection error: {e}")
+except ValueError as e:
+    print(f"❌ Error decoding JSON: {e}")
+
+```
+![](assets/2025-04-29-23-28-15.png)
+
+### Troubleshooting  
+
+
+If you encounter caching hiccups, remove the `.cache/langflow/` folder in your home directory and restart the application. For deeper issues, lean on the [Langflow documentation](https://docs.langflow.org) or IBM watsonx.ai support.
+
+
+
+### Where to Go from Here  
+
+You have just created a fully working Retrieval-Augmented-Generation chatbot powered by IBM watsonx.ai. Experiment with larger context windows, swap in different embedding models, or export the entire flow as a Python script and drop it straight into production. Langflow’s visual canvas combined with watsonx.ai’s enterprise-grade models gives you a rapid yet robust path from idea to deployed application.
+
+**Congratulations!** You have
+learned how to build a Visual RAG Pipeline with Langflow and IBM watsonx.ai
